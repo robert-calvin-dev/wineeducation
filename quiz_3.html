@@ -1,0 +1,188 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winemaking Quiz - Unit 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #2a4015;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            background: #1b2610;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: left;
+            color: #d8e8c4;
+        }
+
+        h1 {
+            color: #d8e8c4;
+        }
+
+        .question {
+            font-weight: bold;
+            margin: 10px 0;
+            color: #d8e8c4;
+        }
+
+        .answers label {
+            display: block;
+            padding: 5px;
+            cursor: pointer;
+            color: #d8e8c4;
+        }
+
+        .answers input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: #5a7d31;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #35491d;
+        }
+
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #d8e8c4;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #7fa26b;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Winemaking Quiz - Unit 3</h1>
+        <form id="quizForm">
+            <div id="quiz"></div>
+            <button type="button" class="btn" onclick="submitQuiz()">Submit Answers</button>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "1. What is the primary purpose of fermentation in winemaking?",
+              options: ["A) To extract tannins", "B) To convert sugar into alcohol and CO₂", "C) To stabilize acidity", "D) To reduce bitterness"], correct: "B" },
+
+            { question: "2. Which type of yeast is most commonly used in winemaking?",
+              options: ["A) Brettanomyces", "B) Saccharomyces cerevisiae", "C) Wild yeasts", "D) Non-Saccharomyces yeasts"], correct: "B" },
+            
+            { question: "3. What is the main effect of malolactic fermentation (MLF) on wine?",
+              options: ["A) Increases acidity", "B) Softens acidity and adds a creamy texture", "C) Increases tannins", "D) Boosts fermentation speed"], correct: "B" },
+
+            { question: "4. Why are oak barrels commonly used for aging wine?",
+              options: ["A) They add flavors like vanilla and spice", "B) They increase acidity", "C) They prevent oxidation", "D) They sterilize the wine"], correct: "A" },
+
+            { question: "5. Which process is used to remove unwanted particles from wine before bottling?",
+              options: ["A) Crushing", "B) Maceration", "C) Fining and filtering", "D) Carbonic maceration"], correct: "C" },
+
+            { question: "6. Which wine style undergoes a secondary fermentation to create carbonation?",
+              options: ["A) White wine", "B) Rosé wine", "C) Sparkling wine", "D) Fortified wine"], correct: "C" },
+
+            { question: "7. What is the term for adding grape spirits to a wine to increase its alcohol content?",
+              options: ["A) Fermentation", "B) Fortification", "C) Aging", "D) Stabilization"], correct: "B" },
+
+            { question: "8. What is a major cause of 'cork taint' (TCA) in wine?",
+              options: ["A) Over-fermentation", "B) Poor barrel aging", "C) Mold-contaminated cork", "D) Excessive sulfites"], correct: "C" },
+
+            { question: "9. What is one common method to prevent oxidation in wine?",
+              options: ["A) Using oak barrels", "B) Adding sulfur dioxide (SO₂)", "C) Increasing maceration", "D) Removing tannins"], correct: "B" },
+
+            { question: "10. What is the primary factor that influences wine style and body?",
+              options: ["A) Yeast selection", "B) Fermentation temperature", "C) Aging vessel", "D) All of the above"], correct: "D" },
+             { question: "11. How does terroir impact winemaking?", 
+              options: ["A) It determines grape acidity and flavor", "B) It prevents oxidation", "C) It influences wine label design", "D) It has no effect"], correct: "A" },
+
+            { question: "12. What is the purpose of cold soaking in winemaking?", 
+              options: ["A) To extract color and aroma", "B) To increase alcohol", "C) To reduce acidity", "D) To accelerate fermentation"], correct: "A" },
+
+            { question: "13. What does a long aging period typically do to wine?", 
+              options: ["A) Reduces its alcohol content", "B) Enhances complexity and softens tannins", "C) Makes it taste fresher", "D) Removes acidity"], correct: "B" },
+
+            { question: "14. What type of fermentation is used in Champagne production?", 
+              options: ["A) Carbonic maceration", "B) Traditional method secondary fermentation", "C) Open fermentation", "D) Fortified fermentation"], correct: "B" },
+
+            { question: "15. What is the main reason winemakers use screw caps instead of corks?", 
+              options: ["A) To speed up aging", "B) To reduce oxygen exposure", "C) To make bottling easier", "D) To enhance aroma"], correct: "B" },
+              { question: "16. What is the purpose of batonnage in winemaking?", 
+              options: ["A) Stirring lees to enhance texture", "B) Removing acidity", "C) Speeding up fermentation", "D) Extracting tannins"], correct: "A" },
+
+            { question: "17. Which winemaking technique is used to increase tannin extraction?", 
+              options: ["A) Cold fermentation", "B) Extended maceration", "C) Carbonic maceration", "D) Bottle aging"], correct: "B" },
+
+            { question: "18. What effect does bottle aging typically have on red wines?", 
+              options: ["A) Reduces tannins and enhances complexity", "B) Increases acidity", "C) Boosts primary fruit aromas", "D) Removes alcohol content"], correct: "A" },
+
+            { question: "19. Which type of oak imparts stronger vanilla and coconut flavors?", 
+              options: ["A) French Oak", "B) American Oak", "C) Hungarian Oak", "D) Neutral Oak"], correct: "B" },
+
+            { question: "20. What is the primary reason for chilling white wine before serving?", 
+              options: ["A) To mute strong tannins", "B) To enhance acidity and freshness", "C) To soften alcohol perception", "D) To make the wine age faster"], correct: "B" }
+              
+        ];
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById("quiz");
+            quizContainer.innerHTML = "";
+            quizData.forEach((q, index) => {
+                let questionHTML = `<div class="question">${q.question}</div><div class="answers">`;
+                q.options.forEach((option, i) => {
+                    let letter = String.fromCharCode(65 + i);
+                    questionHTML += `
+                        <label>
+                            <input type="radio" name="q${index}" value="${letter}"> ${option}
+                        </label>`;
+                });
+                questionHTML += `</div><hr>`;
+                quizContainer.innerHTML += questionHTML;
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && selected.value === q.correct) {
+                    score++;
+                }
+            });
+            let percentage = (score / quizData.length) * 100;
+            const resultContainer = document.getElementById("results");
+            if (percentage >= 80) {
+                resultContainer.innerHTML = `<p style="color: green;">You passed with ${percentage.toFixed(1)}%! Your password: <strong>unit3unlock</strong></p>`;
+            } else {
+                resultContainer.innerHTML = `<p style="color: red;">You failed with ${percentage.toFixed(1)}%. Try again.</p>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadQuiz);
+    </script>
+</body>
+</html>
