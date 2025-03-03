@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viticulture Quiz - Unit 2</title>
+    <style>
+     body {
+ font-family: Arial, sans-serif;
+ text-align: center;
+ margin: 0;
+ padding: 0;
+ background-color: #394301;
+}
+
+.quiz-container {
+ max-width: 800px;
+ background: rgb(29, 24, 24);
+ padding: 20px;
+ margin: 20px auto;
+ box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+ border-radius: 8px;
+ text-align: left;
+ color: #ffffff;
+}
+
+h1 {
+ color: #ffffff;
+}
+
+.question {
+ font-weight: bold;
+ margin: 10px 0;
+ color: #ffffff;
+}
+
+.answers label {
+ display: block;
+ padding: 5px;
+ cursor: pointer;
+ color: #ffffff;
+}
+
+.answers input[type="radio"] {
+ margin-right: 10px;
+}
+
+.btn {
+ background: #5c710a;
+ color: white;
+ padding: 10px 15px;
+ font-size: 16px;
+ border: none;
+ cursor: pointer;
+ margin-top: 15px;
+ border-radius: 5px;
+ transition: background 0.3s ease;
+}
+
+.btn:hover {
+ background: #23272b;
+}
+
+#results {
+ margin-top: 20px;
+ font-size: 18px;
+ font-weight: bold;
+ color: #ffffff;
+}
+
+hr {
+ border: 0;
+ height: 1px;
+ background: #99a76c;
+ margin: 15px 0;
+}
+
+#results p {
+ font-size: 18px;
+ font-weight: bold;
+}
+
+#bestScore {
+ font-size: 18px;
+ font-weight: bold;
+ color: #87a76c;
+}
+
+#attemptHistory {
+ list-style-type: none;
+ padding: 0;
+ color: white;
+}
+
+#attemptHistory li {
+ background: #322f2f;
+ padding: 10px;
+ margin: 5px;
+ border-radius: 5px;
+}
+
+    </style>
+   
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Viticulture Quiz - Unit 2</h1>
+        <form id="quizForm">
+            <div id="quiz"></div>
+            <button type="button" class="btn" onclick="submitQuiz()">Submit Answers</button>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script>
+     const quizData = [
+ { question: "1. What is the most important climate factor affecting grape ripening?",
+   options: ["A) Rainfall", "B) Wind patterns", "C) Temperature", "D) Soil type"], correct: "C" },
+
+ { question: "2. Which of the following soil types retains heat and promotes grape ripening in cooler climates?",
+   options: ["A) Clay", "B) Limestone", "C) Gravel", "D) Sand"], correct: "C" },
+
+ { question: "3. Which climate category produces wines with high acidity and low sugar levels?",
+   options: ["A) Warm climate", "B) Moderate climate", "C) Cool climate", "D) Dry climate"], correct: "C" },
+
+ { question: "4. How does altitude affect grape growing?",
+   options: ["A) It increases ripening speed", "B) It cools the vineyard, slowing ripening", "C) It increases sugar levels dramatically", "D) It has no effect"], correct: "B" },
+
+ { question: "5. Which of the following is a major benefit of limestone soil?",
+   options: ["A) It retains water and stays cool", "B) It promotes high acidity in grapes", "C) It produces rich, full-bodied wines", "D) It prevents disease outbreaks"], correct: "B" },
+
+ { question: "6. What is the main purpose of canopy management in vineyards?",
+   options: ["A) Increase leaf growth", "B) Control sunlight exposure and airflow", "C) Prevent birds from eating grapes", "D) Increase grape size"], correct: "B" },
+
+ { question: "7. Which grape variety is commonly grown in cool climates due to its high acidity retention?",
+   options: ["A) Syrah", "B) Zinfandel", "C) Riesling", "D) Malbec"], correct: "C" },
+
+ { question: "8. Which pest nearly destroyed European vineyards in the 19th century?",
+   options: ["A) Grape moths", "B) Phylloxera", "C) Leafhoppers", "D) Nematodes"], correct: "B" },
+
+ { question: "9. What happens if grapes are harvested too early?",
+   options: ["A) The wine will be too high in alcohol", "B) The wine will be unbalanced with high acidity and low sugar", "C) The grapes will be too sweet", "D) The tannins will be too soft"], correct: "B" },
+
+ { question: "10. What is one of the biggest risks of excessive rainfall before harvest?",
+   options: ["A) It increases grape sweetness", "B) It dilutes flavors and increases disease risk", "C) It prevents fermentation", "D) It increases tannins"], correct: "B" },
+
+ { question: "11. What is the primary goal of organic viticulture?",
+   options: ["A) Maximize grape yield", "B) Eliminate synthetic chemicals", "C) Use only irrigation", "D) Increase wine acidity"], correct: "B" },
+
+ { question: "12. How does gravel soil benefit vine growth?",
+   options: ["A) Retains moisture for longer ripening periods", "B) Warms the roots, helping grapes ripen faster", "C) Prevents mildew and disease", "D) Reduces soil fertility"], correct: "B" },
+
+ { question: "13. Which type of harvest produces sweet, rich wines?",
+   options: ["A) Early harvest", "B) Mid-harvest", "C) Late harvest", "D) None of the above"], correct: "C" },
+
+ { question: "14. Which vineyard disease is caused by fungi and affects grape photosynthesis?",
+   options: ["A) Botrytis", "B) Downy Mildew", "C) Pierce’s Disease", "D) Phylloxera"], correct: "B" },
+
+ { question: "15. What is a major benefit of biodynamic viticulture?",
+   options: ["A) It eliminates the need for pruning", "B) It follows natural and lunar cycles for healthier vines", "C) It reduces vineyard costs", "D) It produces only red wines"], correct: "B" },
+
+ { question: "16. Which sustainable practice helps prevent soil erosion in vineyards?",
+   options: ["A) Drip irrigation", "B) Cover crops", "C) Bird netting", "D) Increasing grape yield"], correct: "B" },
+
+ { question: "17. Why do warm-climate wines have lower acidity than cool-climate wines?",
+   options: ["A) Warm temperatures increase sugar and reduce acidity", "B) Acid levels are controlled by the winemaker", "C) Warm climates have more wind exposure", "D) Cool climates ripen grapes faster"], correct: "A" },
+
+ { question: "18. Which viticultural technique reduces the use of chemical pesticides?",
+   options: ["A) Using hybrid grapes", "B) Integrated Pest Management (IPM)", "C) Removing old vines", "D) Increasing rainfall"], correct: "B" },
+
+ { question: "19. How does late harvest impact a wine’s flavor?",
+   options: ["A) Higher sugar levels, lower acidity", "B) Lower tannins, higher alcohol", "C) Increases acidity, lowers sugar", "D) Decreases body and structure"], correct: "A" },
+
+ { question: "20. What is the key reason Phylloxera-resistant rootstocks are used?",
+   options: ["A) They increase acidity", "B) They prevent vines from being destroyed by Phylloxera", "C) They increase yield", "D) They make wines taste better"], correct: "B" }
+];
+
+function loadQuiz() {
+ const quizContainer = document.getElementById("quiz");
+ quizContainer.innerHTML = "";
+
+ quizData.forEach((q, index) => {
+     let questionHTML = `<div class="question">${q.question}</div><div class="answers">`;
+     q.options.forEach((option, i) => {
+         let letter = String.fromCharCode(65 + i);
+         questionHTML += `
+             <label>
+                 <input type="radio" name="q${index}" value="${letter}"> ${option}
+             </label>`;
+     });
+     questionHTML += `</div><hr>`;
+     quizContainer.innerHTML += questionHTML;
+ });
+
+ loadProgress();
+}
+
+function submitQuiz() {
+ let score = 0;
+ 
+ quizData.forEach((q, index) => {
+     const selected = document.querySelector(`input[name="q${index}"]:checked`);
+     if (selected && selected.value === q.correct) {
+         score++;
+     }
+ });
+
+ let percentage = (score / quizData.length) * 100;
+ saveProgress(score, percentage);
+ 
+ const resultContainer = document.getElementById("results");
+
+ if (percentage >= 80) {
+     resultContainer.innerHTML = `
+         <p style="color: green; font-size: 18px;">
+             Congratulations! You passed with a score of <strong>${score}/${quizData.length} (${percentage.toFixed(1)}%)</strong>!
+         </p>
+         <p style="font-size: 18px;">Your password to unlock Unit 2 is: 
+             <strong style="color: #8b0000;">wineunit2unlock</strong>
+         </p>`;
+ } else {
+     resultContainer.innerHTML = `
+         <p style="color: red; font-size: 18px;">
+             You failed with a score of <strong>${score}/${quizData.length} (${percentage.toFixed(1)}%)</strong>. 
+         </p>
+         <p style="font-size: 18px;">You must score at least <strong>80%</strong> to pass. Please retake the quiz.</p>`;
+ }
+
+ loadProgress();
+}
+
+// Save quiz progress in localStorage
+function saveProgress(score, percentage) {
+ let attempts = JSON.parse(localStorage.getItem("unit_1_quiz_attempts")) || [];
+
+ attempts.push({ score: score, percentage: percentage, date: new Date().toLocaleString() });
+
+ // Keep only the last 5 attempts
+ if (attempts.length > 5) {
+     attempts.shift();
+ }
+
+ localStorage.setItem("unit_1_quiz_attempts", JSON.stringify(attempts));
+
+ // Check and update the best score
+ let bestScore = localStorage.getItem("unit_1_best_score");
+ if (!bestScore || percentage > parseFloat(bestScore)) {
+     localStorage.setItem("unit_1_best_score", percentage);
+ }
+}
+
+// Load previous attempts and best score
+function loadProgress() {
+ let attempts = JSON.parse(localStorage.getItem("unit_1_quiz_attempts")) || [];
+ let bestScore = localStorage.getItem("unit_1_best_score") || "N/A";
+
+ document.getElementById("bestScore").innerText = bestScore !== "N/A" ? `${bestScore}%` : bestScore;
+
+ let attemptHistory = document.getElementById("attemptHistory");
+ attemptHistory.innerHTML = "";
+
+ attempts.forEach((attempt, index) => {
+     let attemptEntry = document.createElement("li");
+     attemptEntry.innerHTML = `Attempt ${index + 1}: <strong>${attempt.score}/${quizData.length} (${attempt.percentage.toFixed(1)}%)</strong> - ${attempt.date}`;
+     attemptHistory.appendChild(attemptEntry);
+ });
+}
+
+document.addEventListener("DOMContentLoaded", loadQuiz);
+    </script>
+</body>
+</html>
